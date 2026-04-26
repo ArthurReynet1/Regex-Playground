@@ -11,7 +11,8 @@ type TokenCategory =
   | "lookaround"
   | "literal"
   | "backreference"
-  | "alternative";
+  | "alternative"
+  | "sequence";
 
 type ParseError = {
   message: string;
@@ -103,7 +104,8 @@ type EnrichedNode =
     } & EnrichedNodeBase)
   | ({ kind: "literal"; value: string } & EnrichedNodeBase)
   | ({ kind: "backreference"; target: number | string } & EnrichedNodeBase)
-  | ({ kind: "alternative" } & EnrichedNodeBase);
+  | ({ kind: "alternative" } & EnrichedNodeBase)
+  | ({ kind: "sequence" } & EnrichedNodeBase);
 
 export type {
   Flag,
