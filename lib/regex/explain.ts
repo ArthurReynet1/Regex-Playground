@@ -130,6 +130,10 @@ const explainAlternative = (
   return `Alternative — ${node.children?.length ?? 0} branches possibles`;
 };
 
+const explainSequence = (
+  node: Extract<EnrichedNode, { kind: "sequence" }>,
+): string => `Séquence — ${node.children?.length ?? 0} éléments à la suite`;
+
 const assertNever = (x: never): never => {
   throw new Error(`Unhandled kind: ${JSON.stringify(x)}`);
 };
@@ -154,6 +158,8 @@ export const explain = (node: EnrichedNode): string => {
       return explainBackreference(node);
     case "alternative":
       return explainAlternative(node);
+    case "sequence":
+      return explainSequence(node);
     default:
       return assertNever(node);
   }
