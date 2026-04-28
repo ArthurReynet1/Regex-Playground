@@ -33,14 +33,22 @@ const categoryClass: Record<TokenCategory, string> = {
   sequence: "text-foreground",
 };
 
+const borderClass = {
+  neutral: "border-input",
+  valid: "border-green-500/60",
+  error: "border-destructive",
+} as const;
+
 const renderTokenized = (
   value: string,
   tokens: Token[] | undefined,
+  errorRange: { start: number; end: number } | undefined,
 ): ReactNode => {
-  if (!tokens || tokens.length === 0) return value;
+  if ((!tokens || tokens.length === 0) && !errorRange) return value;
 
   // Pour chaque char index, prendre la catégorie du token le plus interne (range le plus petit)
   const categoryAt = (i: number): TokenCategory | null => {
+    if (!tokens) return null;
     let result: TokenCategory | null = null;
     let smallestRange = Infinity;
     for (const t of tokens) {
@@ -55,22 +63,33 @@ const renderTokenized = (
     return result;
   };
 
-  // Group consecutive chars with same category into spans
-  const spans: { text: string; category: TokenCategory | null }[] = [];
+  const isError = (i: number): boolean =>
+    errorRange ? i >= errorRange.start && i < errorRange.end : false;
+
+  // Group consecutive chars with same (category, error) into spans
+  const spans: {
+    text: string;
+    category: TokenCategory | null;
+    error: boolean;
+  }[] = [];
   for (let i = 0; i < value.length; i++) {
     const cat = categoryAt(i);
+    const err = isError(i);
     const last = spans[spans.length - 1];
-    if (last && last.category === cat) {
+    if (last && last.category === cat && last.error === err) {
       last.text += value[i];
     } else {
-      spans.push({ text: value[i], category: cat });
+      spans.push({ text: value[i], category: cat, error: err });
     }
   }
 
   return spans.map((span, i) => (
     <span
       key={i}
-      className={span.category ? categoryClass[span.category] : undefined}
+      className={cn(
+        span.category && categoryClass[span.category],
+        span.error && "underline decoration-wavy decoration-destructive",
+      )}
     >
       {span.text}
     </span>
@@ -81,6 +100,8 @@ export const SyntaxInput = ({
   value,
   onChange,
   tokens,
+  errorRange,
+  borderState = "neutral",
   placeholder,
   ariaLabel,
 }: SyntaxInputProps) => {
@@ -100,7 +121,8 @@ export const SyntaxInput = ({
   return (
     <div
       className={cn(
-        "relative h-10 w-full rounded-md border border-input bg-background font-mono text-sm transition-colors",
+        "relative h-10 w-full rounded-md border bg-background font-mono text-sm transition-colors",
+        borderClass[borderState],
       )}
     >
       <div
@@ -108,7 +130,7 @@ export const SyntaxInput = ({
         aria-hidden="true"
         className="pointer-events-none absolute inset-0 overflow-hidden whitespace-pre px-3 py-2 leading-6 [font-feature-settings:'liga'_0,'calt'_0]"
       >
-        {renderTokenized(value, tokens)}
+        {renderTokenized(value, tokens, errorRange)}
       </div>
       <input
         ref={inputRef}
