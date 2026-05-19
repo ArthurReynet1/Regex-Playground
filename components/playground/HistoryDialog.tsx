@@ -1,6 +1,6 @@
 "use client";
 
-import { Clock, Trash2 } from "lucide-react";
+import { Clock, History, Trash2 } from "lucide-react";
 import { toast } from "sonner";
 import {
   Dialog,
@@ -72,7 +72,8 @@ export const HistoryDialog = ({ open, onOpenChange }: HistoryDialogProps) => {
         </DialogHeader>
 
         {entries.length === 0 ? (
-          <div className="py-8 text-center text-sm text-muted-foreground">
+          <div className="flex flex-col items-center gap-2 py-12 text-center text-sm text-muted-foreground">
+            <History className="h-7 w-7 text-muted-foreground/60" aria-hidden="true" />
             Aucune regex testée pour l'instant.
           </div>
         ) : (

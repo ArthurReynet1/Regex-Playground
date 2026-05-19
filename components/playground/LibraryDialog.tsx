@@ -1,7 +1,7 @@
 "use client";
 
 import { useMemo, useState } from "react";
-import { Search } from "lucide-react";
+import { Search, SearchX } from "lucide-react";
 import { toast } from "sonner";
 import {
   Dialog,
@@ -92,7 +92,8 @@ export const LibraryDialog = ({ open, onOpenChange }: LibraryDialogProps) => {
 
         <ul className="max-h-[60vh] space-y-2 overflow-y-auto pr-1">
           {filtered.length === 0 ? (
-            <li className="py-8 text-center text-sm text-muted-foreground">
+            <li className="flex flex-col items-center gap-2 py-12 text-center text-sm text-muted-foreground">
+              <SearchX className="h-7 w-7 text-muted-foreground/60" aria-hidden="true" />
               Aucun pattern trouvé pour « {query} »
             </li>
           ) : (

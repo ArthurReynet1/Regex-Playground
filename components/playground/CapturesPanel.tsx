@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { SearchX } from "lucide-react";
 import { usePlaygroundStore } from "@/stores/playground";
 import { useHoveredMatch } from "@/contexts/MatchHoverContext";
 import { Button } from "@/components/ui/button";
@@ -20,7 +21,8 @@ export const CapturesPanel = () => {
 
   if (matches.length === 0) {
     return (
-      <div className="rounded-md border border-dashed border-input p-4 text-sm text-muted-foreground">
+      <div className="flex flex-col items-center gap-2 rounded-md border border-dashed border-input px-4 py-8 text-center text-sm text-muted-foreground">
+        <SearchX className="h-6 w-6 text-muted-foreground/60" aria-hidden="true" />
         Aucun match pour cette regex et ce texte.
       </div>
     );
