@@ -6,26 +6,12 @@ import { toast } from "sonner";
 import { usePlaygroundStore } from "@/stores/playground";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
-import { ecmascriptTranspiler } from "@/lib/transpilers/ecmascript";
-import { pythonTranspiler } from "@/lib/transpilers/python";
-import { csharpTranspiler } from "@/lib/transpilers/csharp";
-import type { Target, Transpiler } from "@/lib/transpilers/types";
+import { TRANSPILERS, exportKeyToTarget } from "@/lib/transpilers";
+import type { Target } from "@/lib/transpilers/types";
 import type { TranspileWarning } from "@/types/regex";
-
-const TRANSPILERS: Record<Target, Transpiler> = {
-  ecmascript: ecmascriptTranspiler,
-  python: pythonTranspiler,
-  csharp: csharpTranspiler,
-};
 
 const targetToKey: Record<Target, "js" | "python" | "csharp"> = {
   ecmascript: "js",
-  python: "python",
-  csharp: "csharp",
-};
-
-const keyToTarget: Record<"js" | "python" | "csharp", Target> = {
-  js: "ecmascript",
   python: "python",
   csharp: "csharp",
 };
@@ -65,7 +51,7 @@ export const ExportPanel = () => {
   const activeExportKey = usePlaygroundStore((s) => s.activeExport);
   const setActiveExport = usePlaygroundStore((s) => s.setActiveExport);
 
-  const target = keyToTarget[activeExportKey];
+  const target = exportKeyToTarget(activeExportKey);
   const transpiler = TRANSPILERS[target];
 
   const result = useMemo(() => {
