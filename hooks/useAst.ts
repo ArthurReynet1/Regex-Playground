@@ -3,6 +3,7 @@ import { useEffect } from "react";
 import { usePlaygroundStore } from "@/stores/playground";
 import { parse } from "@/lib/regex/parse";
 import { enrich } from "@/lib/regex/enrich";
+import { detectReDoS } from "@/lib/regex/redos";
 import { useDebouncedValue } from "@/hooks/useDebouncedValue";
 import { useShallow } from "zustand/react/shallow";
 
@@ -24,7 +25,8 @@ export const useAst = () => {
     const result = parse(debouncedSource, flagsStr);
     if (result.ok) {
       const ast = enrich(result.pattern);
-      setAst(ast, []);
+      const redosWarnings = detectReDoS(ast, debouncedSource);
+      setAst(ast, redosWarnings);
       setParseError(null);
     } else {
       setParseError(result.error);
