@@ -1,0 +1,605 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`C# transpiler > snapshot — alternation-simple 1`] = `
+{
+  "flags": "RegexOptions.None",
+  "pattern": "cat|dog|fish",
+  "snippet": "using System.Text.RegularExpressions;
+
+var pattern = new Regex(@"cat|dog|fish");
+var match = pattern.Match(text);
+if (match.Success)
+{
+    var full = match.Value;
+    // match.Groups["name"].Value pour les groupes nommés
+}",
+  "warnings": [],
+}
+`;
+
+exports[`C# transpiler > snapshot — char-class-lower 1`] = `
+{
+  "flags": "RegexOptions.IgnoreCase",
+  "pattern": "[a-z]+",
+  "snippet": "using System.Text.RegularExpressions;
+
+var pattern = new Regex(@"[a-z]+", RegexOptions.IgnoreCase);
+foreach (Match match in pattern.Matches(text))
+{
+    var full = match.Value;
+    // match.Groups["name"].Value pour les groupes nommés
+}",
+  "warnings": [
+    {
+      "message": "Flag 'g' non mappable — utilise Regex.Matches() pour matcher toutes les occurrences",
+      "severity": "diff",
+    },
+  ],
+}
+`;
+
+exports[`C# transpiler > snapshot — char-class-negated 1`] = `
+{
+  "flags": "RegexOptions.None",
+  "pattern": "[^0-9]",
+  "snippet": "using System.Text.RegularExpressions;
+
+var pattern = new Regex(@"[^0-9]");
+var match = pattern.Match(text);
+if (match.Success)
+{
+    var full = match.Value;
+    // match.Groups["name"].Value pour les groupes nommés
+}",
+  "warnings": [],
+}
+`;
+
+exports[`C# transpiler > snapshot — flag-dotall 1`] = `
+{
+  "flags": "RegexOptions.Singleline",
+  "pattern": ".+",
+  "snippet": "using System.Text.RegularExpressions;
+
+var pattern = new Regex(@".+", RegexOptions.Singleline);
+foreach (Match match in pattern.Matches(text))
+{
+    var full = match.Value;
+    // match.Groups["name"].Value pour les groupes nommés
+}",
+  "warnings": [
+    {
+      "message": "Flag 'g' non mappable — utilise Regex.Matches() pour matcher toutes les occurrences",
+      "severity": "diff",
+    },
+    {
+      "message": "Flag 's' (dotall) → RegexOptions.Singleline en .NET (attention au nom : 'Multiline' fait autre chose en C#)",
+      "severity": "info",
+    },
+  ],
+}
+`;
+
+exports[`C# transpiler > snapshot — flag-multi 1`] = `
+{
+  "flags": "RegexOptions.IgnoreCase | RegexOptions.Multiline",
+  "pattern": "^foo$",
+  "snippet": "using System.Text.RegularExpressions;
+
+var pattern = new Regex(@"^foo$", RegexOptions.IgnoreCase | RegexOptions.Multiline);
+foreach (Match match in pattern.Matches(text))
+{
+    var full = match.Value;
+    // match.Groups["name"].Value pour les groupes nommés
+}",
+  "warnings": [
+    {
+      "message": "Flag 'g' non mappable — utilise Regex.Matches() pour matcher toutes les occurrences",
+      "severity": "diff",
+    },
+  ],
+}
+`;
+
+exports[`C# transpiler > snapshot — lookahead-positive 1`] = `
+{
+  "flags": "RegexOptions.None",
+  "pattern": "(?=foo)bar",
+  "snippet": "using System.Text.RegularExpressions;
+
+var pattern = new Regex(@"(?=foo)bar");
+var match = pattern.Match(text);
+if (match.Success)
+{
+    var full = match.Value;
+    // match.Groups["name"].Value pour les groupes nommés
+}",
+  "warnings": [],
+}
+`;
+
+exports[`C# transpiler > snapshot — lookbehind-fixed 1`] = `
+{
+  "flags": "RegexOptions.None",
+  "pattern": "(?<=abc)def",
+  "snippet": "using System.Text.RegularExpressions;
+
+var pattern = new Regex(@"(?<=abc)def");
+var match = pattern.Match(text);
+if (match.Success)
+{
+    var full = match.Value;
+    // match.Groups["name"].Value pour les groupes nommés
+}",
+  "warnings": [],
+}
+`;
+
+exports[`C# transpiler > snapshot — lookbehind-variable 1`] = `
+{
+  "flags": "RegexOptions.None",
+  "pattern": "(?<=ab|abcd)xyz",
+  "snippet": "using System.Text.RegularExpressions;
+
+var pattern = new Regex(@"(?<=ab|abcd)xyz");
+var match = pattern.Match(text);
+if (match.Success)
+{
+    var full = match.Value;
+    // match.Groups["name"].Value pour les groupes nommés
+}",
+  "warnings": [],
+}
+`;
+
+exports[`C# transpiler > snapshot — named-group-with-backref 1`] = `
+{
+  "flags": "RegexOptions.None",
+  "pattern": "(?<word>\\w+)\\s+\\k<word>",
+  "snippet": "using System.Text.RegularExpressions;
+
+var pattern = new Regex(@"(?<word>\\w+)\\s+\\k<word>");
+var match = pattern.Match(text);
+if (match.Success)
+{
+    var full = match.Value;
+    // match.Groups["name"].Value pour les groupes nommés
+}",
+  "warnings": [],
+}
+`;
+
+exports[`C# transpiler > snapshot — named-group-year 1`] = `
+{
+  "flags": "RegexOptions.None",
+  "pattern": "(?<year>\\d{4})",
+  "snippet": "using System.Text.RegularExpressions;
+
+var pattern = new Regex(@"(?<year>\\d{4})");
+var match = pattern.Match(text);
+if (match.Success)
+{
+    var full = match.Value;
+    // match.Groups["name"].Value pour les groupes nommés
+}",
+  "warnings": [],
+}
+`;
+
+exports[`C# transpiler > snapshot — phone-number 1`] = `
+{
+  "flags": "RegexOptions.None",
+  "pattern": "^(\\d{3})-(\\d{4})$",
+  "snippet": "using System.Text.RegularExpressions;
+
+var pattern = new Regex(@"^(\\d{3})-(\\d{4})$");
+var match = pattern.Match(text);
+if (match.Success)
+{
+    var full = match.Value;
+    // match.Groups["name"].Value pour les groupes nommés
+}",
+  "warnings": [],
+}
+`;
+
+exports[`C# transpiler > snapshot — simple-digits 1`] = `
+{
+  "flags": "RegexOptions.None",
+  "pattern": "\\d+",
+  "snippet": "using System.Text.RegularExpressions;
+
+var pattern = new Regex(@"\\d+");
+foreach (Match match in pattern.Matches(text))
+{
+    var full = match.Value;
+    // match.Groups["name"].Value pour les groupes nommés
+}",
+  "warnings": [
+    {
+      "message": "Flag 'g' non mappable — utilise Regex.Matches() pour matcher toutes les occurrences",
+      "severity": "diff",
+    },
+  ],
+}
+`;
+
+exports[`ECMAScript transpiler > snapshot — alternation-simple 1`] = `
+{
+  "flags": "",
+  "pattern": "cat|dog|fish",
+  "snippet": "const pattern = /cat|dog|fish/;
+const match = pattern.exec(text);
+if (match) {
+  const full = match[0];
+  // match.groups contient les groupes nommés (flag 'd' donne les indices)
+}",
+  "warnings": [],
+}
+`;
+
+exports[`ECMAScript transpiler > snapshot — char-class-lower 1`] = `
+{
+  "flags": "gi",
+  "pattern": "[a-z]+",
+  "snippet": "const pattern = /[a-z]+/gi;
+const match = pattern.exec(text);
+if (match) {
+  const full = match[0];
+  // match.groups contient les groupes nommés (flag 'd' donne les indices)
+}",
+  "warnings": [],
+}
+`;
+
+exports[`ECMAScript transpiler > snapshot — char-class-negated 1`] = `
+{
+  "flags": "",
+  "pattern": "[^0-9]",
+  "snippet": "const pattern = /[^0-9]/;
+const match = pattern.exec(text);
+if (match) {
+  const full = match[0];
+  // match.groups contient les groupes nommés (flag 'd' donne les indices)
+}",
+  "warnings": [],
+}
+`;
+
+exports[`ECMAScript transpiler > snapshot — flag-dotall 1`] = `
+{
+  "flags": "gs",
+  "pattern": ".+",
+  "snippet": "const pattern = /.+/gs;
+const match = pattern.exec(text);
+if (match) {
+  const full = match[0];
+  // match.groups contient les groupes nommés (flag 'd' donne les indices)
+}",
+  "warnings": [],
+}
+`;
+
+exports[`ECMAScript transpiler > snapshot — flag-multi 1`] = `
+{
+  "flags": "gim",
+  "pattern": "^foo$",
+  "snippet": "const pattern = /^foo$/gim;
+const match = pattern.exec(text);
+if (match) {
+  const full = match[0];
+  // match.groups contient les groupes nommés (flag 'd' donne les indices)
+}",
+  "warnings": [],
+}
+`;
+
+exports[`ECMAScript transpiler > snapshot — lookahead-positive 1`] = `
+{
+  "flags": "",
+  "pattern": "(?=foo)bar",
+  "snippet": "const pattern = /(?=foo)bar/;
+const match = pattern.exec(text);
+if (match) {
+  const full = match[0];
+  // match.groups contient les groupes nommés (flag 'd' donne les indices)
+}",
+  "warnings": [],
+}
+`;
+
+exports[`ECMAScript transpiler > snapshot — lookbehind-fixed 1`] = `
+{
+  "flags": "",
+  "pattern": "(?<=abc)def",
+  "snippet": "const pattern = /(?<=abc)def/;
+const match = pattern.exec(text);
+if (match) {
+  const full = match[0];
+  // match.groups contient les groupes nommés (flag 'd' donne les indices)
+}",
+  "warnings": [],
+}
+`;
+
+exports[`ECMAScript transpiler > snapshot — lookbehind-variable 1`] = `
+{
+  "flags": "",
+  "pattern": "(?<=ab|abcd)xyz",
+  "snippet": "const pattern = /(?<=ab|abcd)xyz/;
+const match = pattern.exec(text);
+if (match) {
+  const full = match[0];
+  // match.groups contient les groupes nommés (flag 'd' donne les indices)
+}",
+  "warnings": [],
+}
+`;
+
+exports[`ECMAScript transpiler > snapshot — named-group-with-backref 1`] = `
+{
+  "flags": "",
+  "pattern": "(?<word>\\w+)\\s+\\k<word>",
+  "snippet": "const pattern = /(?<word>\\w+)\\s+\\k<word>/;
+const match = pattern.exec(text);
+if (match) {
+  const full = match[0];
+  // match.groups contient les groupes nommés (flag 'd' donne les indices)
+}",
+  "warnings": [],
+}
+`;
+
+exports[`ECMAScript transpiler > snapshot — named-group-year 1`] = `
+{
+  "flags": "",
+  "pattern": "(?<year>\\d{4})",
+  "snippet": "const pattern = /(?<year>\\d{4})/;
+const match = pattern.exec(text);
+if (match) {
+  const full = match[0];
+  // match.groups contient les groupes nommés (flag 'd' donne les indices)
+}",
+  "warnings": [],
+}
+`;
+
+exports[`ECMAScript transpiler > snapshot — phone-number 1`] = `
+{
+  "flags": "",
+  "pattern": "^(\\d{3})-(\\d{4})$",
+  "snippet": "const pattern = /^(\\d{3})-(\\d{4})$/;
+const match = pattern.exec(text);
+if (match) {
+  const full = match[0];
+  // match.groups contient les groupes nommés (flag 'd' donne les indices)
+}",
+  "warnings": [],
+}
+`;
+
+exports[`ECMAScript transpiler > snapshot — simple-digits 1`] = `
+{
+  "flags": "g",
+  "pattern": "\\d+",
+  "snippet": "const pattern = /\\d+/g;
+const match = pattern.exec(text);
+if (match) {
+  const full = match[0];
+  // match.groups contient les groupes nommés (flag 'd' donne les indices)
+}",
+  "warnings": [],
+}
+`;
+
+exports[`Python transpiler > snapshot — alternation-simple 1`] = `
+{
+  "flags": "0",
+  "pattern": "cat|dog|fish",
+  "snippet": "import re
+
+pattern = re.compile(r"cat|dog|fish")
+match = pattern.search(text)
+if match:
+    full = match.group(0)
+    # match.group("name") pour les groupes nommés",
+  "warnings": [],
+}
+`;
+
+exports[`Python transpiler > snapshot — char-class-lower 1`] = `
+{
+  "flags": "re.IGNORECASE",
+  "pattern": "[a-z]+",
+  "snippet": "import re
+
+pattern = re.compile(r"[a-z]+", re.IGNORECASE)
+for match in pattern.finditer(text):
+    full = match.group(0)
+    # match.group("name") pour les groupes nommés",
+  "warnings": [
+    {
+      "message": "Flag 'g' non mappable — utilise re.findall() ou re.finditer() pour matcher toutes les occurrences",
+      "severity": "diff",
+    },
+  ],
+}
+`;
+
+exports[`Python transpiler > snapshot — char-class-negated 1`] = `
+{
+  "flags": "0",
+  "pattern": "[^0-9]",
+  "snippet": "import re
+
+pattern = re.compile(r"[^0-9]")
+match = pattern.search(text)
+if match:
+    full = match.group(0)
+    # match.group("name") pour les groupes nommés",
+  "warnings": [],
+}
+`;
+
+exports[`Python transpiler > snapshot — flag-dotall 1`] = `
+{
+  "flags": "re.DOTALL",
+  "pattern": ".+",
+  "snippet": "import re
+
+pattern = re.compile(r".+", re.DOTALL)
+for match in pattern.finditer(text):
+    full = match.group(0)
+    # match.group("name") pour les groupes nommés",
+  "warnings": [
+    {
+      "message": "Flag 'g' non mappable — utilise re.findall() ou re.finditer() pour matcher toutes les occurrences",
+      "severity": "diff",
+    },
+  ],
+}
+`;
+
+exports[`Python transpiler > snapshot — flag-multi 1`] = `
+{
+  "flags": "re.IGNORECASE | re.MULTILINE",
+  "pattern": "^foo$",
+  "snippet": "import re
+
+pattern = re.compile(r"^foo$", re.IGNORECASE | re.MULTILINE)
+for match in pattern.finditer(text):
+    full = match.group(0)
+    # match.group("name") pour les groupes nommés",
+  "warnings": [
+    {
+      "message": "Flag 'g' non mappable — utilise re.findall() ou re.finditer() pour matcher toutes les occurrences",
+      "severity": "diff",
+    },
+  ],
+}
+`;
+
+exports[`Python transpiler > snapshot — lookahead-positive 1`] = `
+{
+  "flags": "0",
+  "pattern": "(?=foo)bar",
+  "snippet": "import re
+
+pattern = re.compile(r"(?=foo)bar")
+match = pattern.search(text)
+if match:
+    full = match.group(0)
+    # match.group("name") pour les groupes nommés",
+  "warnings": [],
+}
+`;
+
+exports[`Python transpiler > snapshot — lookbehind-fixed 1`] = `
+{
+  "flags": "0",
+  "pattern": "(?<=abc)def",
+  "snippet": "import re
+
+pattern = re.compile(r"(?<=abc)def")
+match = pattern.search(text)
+if match:
+    full = match.group(0)
+    # match.group("name") pour les groupes nommés",
+  "warnings": [],
+}
+`;
+
+exports[`Python transpiler > snapshot — lookbehind-variable 1`] = `
+{
+  "flags": "0",
+  "pattern": "(?<=ab|abcd)xyz",
+  "snippet": "import re
+
+pattern = re.compile(r"(?<=ab|abcd)xyz")
+match = pattern.search(text)
+if match:
+    full = match.group(0)
+    # match.group("name") pour les groupes nommés",
+  "warnings": [
+    {
+      "message": "Lookbehind avec alternance — Python re stdlib lèvera SyntaxError. Utilise la lib tierce \`regex\` ou réécris avec une longueur fixe.",
+      "offset": 0,
+      "severity": "error",
+    },
+  ],
+}
+`;
+
+exports[`Python transpiler > snapshot — named-group-with-backref 1`] = `
+{
+  "flags": "0",
+  "pattern": "(?P<word>\\w+)\\s+(?P=word)",
+  "snippet": "import re
+
+pattern = re.compile(r"(?P<word>\\w+)\\s+(?P=word)")
+match = pattern.search(text)
+if match:
+    full = match.group(0)
+    # match.group("name") pour les groupes nommés",
+  "warnings": [
+    {
+      "message": "Groupes nommés convertis : (?<name>) → (?P<name>) et \\k<name> → (?P=name)",
+      "severity": "info",
+    },
+  ],
+}
+`;
+
+exports[`Python transpiler > snapshot — named-group-year 1`] = `
+{
+  "flags": "0",
+  "pattern": "(?P<year>\\d{4})",
+  "snippet": "import re
+
+pattern = re.compile(r"(?P<year>\\d{4})")
+match = pattern.search(text)
+if match:
+    full = match.group(0)
+    # match.group("name") pour les groupes nommés",
+  "warnings": [
+    {
+      "message": "Groupes nommés convertis : (?<name>) → (?P<name>) et \\k<name> → (?P=name)",
+      "severity": "info",
+    },
+  ],
+}
+`;
+
+exports[`Python transpiler > snapshot — phone-number 1`] = `
+{
+  "flags": "0",
+  "pattern": "^(\\d{3})-(\\d{4})$",
+  "snippet": "import re
+
+pattern = re.compile(r"^(\\d{3})-(\\d{4})$")
+match = pattern.search(text)
+if match:
+    full = match.group(0)
+    # match.group("name") pour les groupes nommés",
+  "warnings": [],
+}
+`;
+
+exports[`Python transpiler > snapshot — simple-digits 1`] = `
+{
+  "flags": "0",
+  "pattern": "\\d+",
+  "snippet": "import re
+
+pattern = re.compile(r"\\d+")
+for match in pattern.finditer(text):
+    full = match.group(0)
+    # match.group("name") pour les groupes nommés",
+  "warnings": [
+    {
+      "message": "Flag 'g' non mappable — utilise re.findall() ou re.finditer() pour matcher toutes les occurrences",
+      "severity": "diff",
+    },
+  ],
+}
+`;

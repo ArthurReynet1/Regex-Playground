@@ -6,6 +6,7 @@ import { TextInput } from "@/components/playground/TextInput";
 import { AstTree } from "@/components/playground/AstTree";
 import { CapturesPanel } from "@/components/playground/CapturesPanel";
 import { ReDoSBanner } from "@/components/playground/ReDoSBanner";
+import { ExportPanel } from "@/components/playground/ExportPanel";
 import { HoverProvider } from "@/contexts/HoverContext";
 import { MatchHoverProvider } from "@/contexts/MatchHoverContext";
 import { useRegexWorker } from "@/hooks/useRegexWorker";
@@ -84,6 +85,19 @@ export default function Home() {
                   Matches & captures
                 </h2>
                 <CapturesPanel />
+              </section>
+
+              <section
+                className="space-y-3"
+                aria-labelledby="export-section"
+              >
+                <h2
+                  id="export-section"
+                  className="text-sm font-semibold text-muted-foreground"
+                >
+                  Export
+                </h2>
+                <ExportPanel />
               </section>
             </aside>
           </div>
