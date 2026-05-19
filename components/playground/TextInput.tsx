@@ -51,6 +51,8 @@ export const TextInput = () => {
       />
       <div className="flex flex-wrap items-center justify-between gap-2 text-xs">
         <span
+          role="status"
+          aria-live="polite"
           className={
             isOverLimit ? "text-destructive" : "text-muted-foreground"
           }
