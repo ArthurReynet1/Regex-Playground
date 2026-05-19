@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { ThemeProvider } from "@/components/theme/ThemeProvider";
+import { MotionProvider } from "@/components/theme/MotionProvider";
 import { Toaster } from "@/components/ui/sonner";
 import "./globals.css";
 
@@ -34,8 +35,10 @@ export default function RootLayout({
     >
       <body className="min-h-full flex flex-col">
         <ThemeProvider>
-          <TooltipProvider delayDuration={200}>{children}</TooltipProvider>
-          <Toaster />
+          <MotionProvider>
+            <TooltipProvider delayDuration={200}>{children}</TooltipProvider>
+            <Toaster />
+          </MotionProvider>
         </ThemeProvider>
       </body>
     </html>
