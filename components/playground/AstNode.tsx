@@ -1,6 +1,7 @@
 "use client";
 
-import { useState, type KeyboardEvent } from "react";
+import { type KeyboardEvent } from "react";
+import { AnimatePresence, motion } from "framer-motion";
 import {
   AlignLeft,
   Anchor,
@@ -234,21 +235,30 @@ export const AstNode = ({
         </span>
       </div>
 
-      {hasChildren && expanded && (
-        <ul role="group" className="m-0 list-none p-0">
-          {node.children!.map((child) => (
-            <AstNode
-              key={nodeId(child)}
-              node={child}
-              depth={depth + 1}
-              activeId={activeId}
-              onActivate={onActivate}
-              onToggle={onToggle}
-              isExpanded={isExpanded}
-            />
-          ))}
-        </ul>
-      )}
+      <AnimatePresence initial={false}>
+        {hasChildren && expanded && (
+          <motion.ul
+            role="group"
+            initial={{ height: 0, opacity: 0 }}
+            animate={{ height: "auto", opacity: 1 }}
+            exit={{ height: 0, opacity: 0 }}
+            transition={{ duration: 0.15, ease: "easeOut" }}
+            className="m-0 list-none overflow-hidden p-0"
+          >
+            {node.children!.map((child) => (
+              <AstNode
+                key={nodeId(child)}
+                node={child}
+                depth={depth + 1}
+                activeId={activeId}
+                onActivate={onActivate}
+                onToggle={onToggle}
+                isExpanded={isExpanded}
+              />
+            ))}
+          </motion.ul>
+        )}
+      </AnimatePresence>
     </li>
   );
 };
