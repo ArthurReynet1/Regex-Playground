@@ -46,11 +46,7 @@ const renderTokenized = (
   errorRange: { start: number; end: number } | undefined,
   highlightRange: { start: number; end: number } | undefined,
 ): ReactNode => {
-  if (
-    (!tokens || tokens.length === 0) &&
-    !errorRange &&
-    !highlightRange
-  )
+  if ((!tokens || tokens.length === 0) && !errorRange && !highlightRange)
     return value;
 
   // Pour chaque char index, prendre la catégorie du token le plus interne (range le plus petit)
@@ -113,7 +109,7 @@ const renderTokenized = (
       className={cn(
         span.category && categoryClass[span.category],
         span.error && "underline decoration-wavy decoration-destructive",
-        span.highlighted && "bg-accent/60 rounded-sm",
+        span.highlighted && "bg-primary/30 ring-1 ring-primary/50 rounded-sm",
       )}
     >
       {span.text}
