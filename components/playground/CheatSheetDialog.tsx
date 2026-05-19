@@ -18,19 +18,16 @@ const SectionBlock = ({ section }: { section: CheatSheetSection }) => (
     <h3 className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">
       {section.title}
     </h3>
-    <ul className="space-y-1.5">
+    <div className="grid grid-cols-[minmax(0,8rem)_1fr] gap-x-3 gap-y-1.5 text-sm">
       {section.entries.map((entry) => (
-        <li
-          key={entry.syntax}
-          className="flex items-baseline gap-3 text-sm"
-        >
-          <code className="shrink-0 rounded-sm bg-muted px-1.5 py-0.5 font-mono text-xs">
+        <div key={entry.syntax} className="contents">
+          <code className="self-start truncate rounded-sm bg-muted px-1.5 py-0.5 font-mono text-xs">
             {entry.syntax}
           </code>
           <span className="text-muted-foreground">{entry.description}</span>
-        </li>
+        </div>
       ))}
-    </ul>
+    </div>
   </div>
 );
 
@@ -45,7 +42,7 @@ export const CheatSheetDialog = ({
 }: CheatSheetDialogProps) => {
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="max-w-3xl">
+      <DialogContent className="max-w-5xl">
         <DialogHeader>
           <DialogTitle>Cheatsheet</DialogTitle>
           <DialogDescription>
@@ -63,21 +60,16 @@ export const CheatSheetDialog = ({
 
           <div className="space-y-2">
             <h2 className="text-sm font-semibold">Raccourcis clavier</h2>
-            <ul className="space-y-1.5">
+            <div className="grid grid-cols-[minmax(0,10rem)_1fr] gap-x-3 gap-y-2 text-sm">
               {SHORTCUTS.map((s) => (
-                <li
-                  key={s.combo}
-                  className="flex items-baseline gap-3 text-sm"
-                >
-                  <kbd className="shrink-0 rounded-sm border border-input bg-muted px-1.5 py-0.5 font-mono text-xs">
+                <div key={s.combo} className="contents">
+                  <kbd className="self-start truncate rounded-sm border border-input bg-muted px-1.5 py-0.5 font-mono text-xs">
                     {s.combo}
                   </kbd>
-                  <span className="text-muted-foreground">
-                    {s.description}
-                  </span>
-                </li>
+                  <span className="text-muted-foreground">{s.description}</span>
+                </div>
               ))}
-            </ul>
+            </div>
           </div>
         </div>
       </DialogContent>
