@@ -19,8 +19,11 @@ const geistMono = Geist_Mono({
 const SITE_TITLE = "Regex Playground";
 const SITE_DESCRIPTION =
   "Testez, décomposez et exportez vos regex. Un playground visuel pour développeurs francophones.";
+const SITE_URL =
+  process.env.NEXT_PUBLIC_SITE_URL ?? "https://regex-playground.local";
 
 export const metadata: Metadata = {
+  metadataBase: new URL(SITE_URL),
   title: {
     default: SITE_TITLE,
     template: `%s | ${SITE_TITLE}`,

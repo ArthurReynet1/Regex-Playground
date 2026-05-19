@@ -18,9 +18,8 @@ export default async function OpengraphImage() {
           width: "100%",
           height: "100%",
           padding: "80px",
-          background:
-            "linear-gradient(135deg, oklch(0.18 0 0) 0%, oklch(0.12 0 0) 100%)",
-          color: "oklch(0.985 0 0)",
+          background: "linear-gradient(135deg, #1a1a1a 0%, #0d0d0d 100%)",
+          color: "#fafafa",
           fontFamily: "sans-serif",
         }}
       >
@@ -61,8 +60,8 @@ export default async function OpengraphImage() {
               fontSize: 44,
               padding: "16px 28px",
               borderRadius: "16px",
-              background: "oklch(0.25 0 0)",
-              border: "1px solid oklch(0.35 0 0)",
+              background: "#262626",
+              border: "1px solid #404040",
               fontFamily: "monospace",
             }}
           >
