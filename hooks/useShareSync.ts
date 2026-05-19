@@ -6,13 +6,9 @@ import { usePlaygroundStore } from "@/stores/playground";
 import { useDebouncedValue } from "@/hooks/useDebouncedValue";
 import { encodeShareUrl } from "@/lib/share/encode";
 import { decodeShareUrl } from "@/lib/share/decode";
-import type { Flag } from "@/types/regex";
+import { parseFlagsString } from "@/lib/regex/parse-flags";
 
 const URL_SYNC_DELAY_MS = 500;
-const VALID_FLAGS = new Set<string>(["g", "i", "m", "s", "u", "y", "d", "v"]);
-
-const parseFlags = (flags: string): Flag[] =>
-  flags.split("").filter((f) => VALID_FLAGS.has(f)) as Flag[];
 
 /**
  * Two-way sync between store state and the URL query string.
@@ -48,7 +44,7 @@ export const useShareSync = () => {
       const decoded = decodeShareUrl(encoded);
       if (decoded) {
         setSource(decoded.s);
-        setFlags(parseFlags(decoded.f));
+        setFlags(parseFlagsString(decoded.f));
         setText(decoded.t);
       } else {
         console.warn(

@@ -1,7 +1,7 @@
 "use client";
 
 import { useMemo } from "react";
-import { AlertCircle, AlertTriangle, Copy, Info } from "lucide-react";
+import { AlertCircle, AlertTriangle, Code2, Copy, Info } from "lucide-react";
 import { toast } from "sonner";
 import { usePlaygroundStore } from "@/stores/playground";
 import { Button } from "@/components/ui/button";
@@ -72,7 +72,8 @@ export const ExportPanel = () => {
 
   if (!result) {
     return (
-      <div className="rounded-md border border-dashed border-input p-4 text-sm text-muted-foreground">
+      <div className="flex flex-col items-center gap-2 rounded-md border border-dashed border-input px-4 py-8 text-center text-sm text-muted-foreground">
+        <Code2 className="h-6 w-6 text-muted-foreground/60" aria-hidden="true" />
         {parseError
           ? "Corrige la regex pour voir le code exporté."
           : "Tape une regex pour voir le code exporté."}
@@ -140,7 +141,7 @@ export const ExportPanel = () => {
           variant="outline"
           size="sm"
           onClick={() => copy(result.pattern, "Motif")}
-          className="flex-1"
+          className="flex-1 motion-safe:transition-transform motion-safe:duration-100 motion-safe:active:scale-[0.97]"
         >
           <Copy className="mr-2 h-3.5 w-3.5" />
           Copier motif
@@ -150,7 +151,7 @@ export const ExportPanel = () => {
           variant="default"
           size="sm"
           onClick={() => copy(snippetWithHeader, "Snippet")}
-          className="flex-1"
+          className="flex-1 motion-safe:transition-transform motion-safe:duration-100 motion-safe:active:scale-[0.97]"
         >
           <Copy className="mr-2 h-3.5 w-3.5" />
           Copier snippet

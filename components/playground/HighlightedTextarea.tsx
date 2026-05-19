@@ -1,7 +1,11 @@
 "use client";
 
 import { useEffect, useRef, type ChangeEvent, type ReactNode } from "react";
+import { motion, useReducedMotion } from "framer-motion";
 import { cn } from "@/lib/utils";
+
+const STAGGER_DELAY_S = 0.02;
+const MAX_STAGGERED_COUNT = 50;
 
 export type Range = { start: number; end: number };
 
@@ -22,6 +26,7 @@ const renderWithMatches = (
   matches: Range[],
   hoveredIndex: number | null | undefined,
   onMatchHover: ((index: number | null) => void) | undefined,
+  shouldReduceMotion: boolean,
 ): ReactNode => {
   if (matches.length === 0) return value;
 
@@ -42,9 +47,17 @@ const renderWithMatches = (
     }
 
     const isHovered = hoveredIndex === m.originalIndex;
+    // Cap the stagger to keep the animation snappy even with thousands of matches.
+    // When reduced motion is requested, we zero everything for instant rendering.
+    const delay =
+      shouldReduceMotion || i >= MAX_STAGGERED_COUNT ? 0 : i * STAGGER_DELAY_S;
+    const duration = shouldReduceMotion ? 0 : 0.1;
     nodes.push(
-      <mark
+      <motion.mark
         key={`m-${m.originalIndex}`}
+        initial={shouldReduceMotion ? false : { opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration, delay }}
         onMouseEnter={() => onMatchHover?.(m.originalIndex)}
         onMouseLeave={() => onMatchHover?.(null)}
         className={cn(
@@ -55,7 +68,7 @@ const renderWithMatches = (
         )}
       >
         {value.slice(start, end)}
-      </mark>,
+      </motion.mark>,
     );
     cursor = end;
   });
@@ -80,6 +93,7 @@ export const HighlightedTextarea = ({
 }: HighlightedTextareaProps) => {
   const textareaRef = useRef<HTMLTextAreaElement>(null);
   const overlayRef = useRef<HTMLDivElement>(null);
+  const shouldReduceMotion = useReducedMotion() ?? false;
 
   const syncOverlayPadding = () => {
     if (!textareaRef.current || !overlayRef.current) return;
@@ -127,7 +141,13 @@ export const HighlightedTextarea = ({
         className="pointer-events-none absolute inset-0 overflow-hidden whitespace-pre-wrap break-words py-2 pl-3 leading-6 [font-feature-settings:'liga'_0,'calt'_0]"
       >
         {matches && matches.length > 0
-          ? renderWithMatches(value, matches, hoveredMatchIndex, onMatchHover)
+          ? renderWithMatches(
+              value,
+              matches,
+              hoveredMatchIndex,
+              onMatchHover,
+              shouldReduceMotion,
+            )
           : value}
       </div>
       <textarea

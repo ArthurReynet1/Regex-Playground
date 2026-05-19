@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState, type KeyboardEvent } from "react";
+import { AlertTriangle, Wand2 } from "lucide-react";
 import { usePlaygroundStore } from "@/stores/playground";
 import { AstNode, nodeId } from "./AstNode";
 import type { EnrichedNode } from "@/types/regex";
@@ -126,16 +127,18 @@ export const AstTree = () => {
 
   if (parseError) {
     return (
-      <div className="rounded-md border border-dashed border-destructive/40 bg-destructive/5 p-4 text-sm text-muted-foreground">
-        ⚠️ Correction de la regex requise — l'arbre est masqué tant que la
-        syntaxe est invalide.
+      <div className="flex flex-col items-center gap-2 rounded-md border border-dashed border-destructive/40 bg-destructive/5 px-4 py-8 text-center text-sm text-muted-foreground">
+        <AlertTriangle className="h-6 w-6 text-destructive/70" aria-hidden="true" />
+        Correction de la regex requise — l'arbre est masqué tant que la syntaxe
+        est invalide.
       </div>
     );
   }
 
   if (!ast || !source) {
     return (
-      <div className="rounded-md border border-dashed border-input p-4 text-sm text-muted-foreground">
+      <div className="flex flex-col items-center gap-2 rounded-md border border-dashed border-input px-4 py-8 text-center text-sm text-muted-foreground">
+        <Wand2 className="h-6 w-6 text-muted-foreground/60" aria-hidden="true" />
         Écris une regex pour voir sa décomposition.
       </div>
     );
