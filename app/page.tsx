@@ -1,5 +1,7 @@
 "use client";
 
+import { useEffect, useState } from "react";
+import { Library } from "lucide-react";
 import { RegexEditor } from "@/components/playground/RegexEditor";
 import { FlagsToggles } from "@/components/playground/FlagsToggles";
 import { TextInput } from "@/components/playground/TextInput";
@@ -7,12 +9,26 @@ import { AstTree } from "@/components/playground/AstTree";
 import { CapturesPanel } from "@/components/playground/CapturesPanel";
 import { ReDoSBanner } from "@/components/playground/ReDoSBanner";
 import { ExportPanel } from "@/components/playground/ExportPanel";
+import { LibraryDialog } from "@/components/playground/LibraryDialog";
+import { Button } from "@/components/ui/button";
 import { HoverProvider } from "@/contexts/HoverContext";
 import { MatchHoverProvider } from "@/contexts/MatchHoverContext";
 import { useRegexWorker } from "@/hooks/useRegexWorker";
 
 export default function Home() {
   useRegexWorker();
+  const [libraryOpen, setLibraryOpen] = useState(false);
+
+  useEffect(() => {
+    const handler = (e: KeyboardEvent) => {
+      if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === "k") {
+        e.preventDefault();
+        setLibraryOpen((prev) => !prev);
+      }
+    };
+    window.addEventListener("keydown", handler);
+    return () => window.removeEventListener("keydown", handler);
+  }, []);
 
   return (
     <HoverProvider>
@@ -35,12 +51,27 @@ export default function Home() {
                 className="space-y-3"
                 aria-labelledby="regex-section"
               >
-                <h2
-                  id="regex-section"
-                  className="text-sm font-semibold text-muted-foreground"
-                >
-                  Regex
-                </h2>
+                <div className="flex items-center justify-between gap-2">
+                  <h2
+                    id="regex-section"
+                    className="text-sm font-semibold text-muted-foreground"
+                  >
+                    Regex
+                  </h2>
+                  <Button
+                    type="button"
+                    variant="outline"
+                    size="sm"
+                    onClick={() => setLibraryOpen(true)}
+                    className="gap-2"
+                  >
+                    <Library className="h-3.5 w-3.5" />
+                    Bibliothèque
+                    <kbd className="ml-1 hidden rounded-sm bg-muted px-1.5 py-0.5 font-mono text-[10px] text-muted-foreground sm:inline">
+                      ⌘K
+                    </kbd>
+                  </Button>
+                </div>
                 <RegexEditor />
                 <FlagsToggles />
                 <ReDoSBanner />
@@ -103,6 +134,7 @@ export default function Home() {
           </div>
         </div>
       </main>
+      <LibraryDialog open={libraryOpen} onOpenChange={setLibraryOpen} />
       </MatchHoverProvider>
     </HoverProvider>
   );
