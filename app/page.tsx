@@ -4,7 +4,9 @@ import { RegexEditor } from "@/components/playground/RegexEditor";
 import { FlagsToggles } from "@/components/playground/FlagsToggles";
 import { TextInput } from "@/components/playground/TextInput";
 import { AstTree } from "@/components/playground/AstTree";
+import { CapturesPanel } from "@/components/playground/CapturesPanel";
 import { HoverProvider } from "@/contexts/HoverContext";
+import { MatchHoverProvider } from "@/contexts/MatchHoverContext";
 import { useRegexWorker } from "@/hooks/useRegexWorker";
 
 export default function Home() {
@@ -12,6 +14,7 @@ export default function Home() {
 
   return (
     <HoverProvider>
+      <MatchHoverProvider>
       <main className="flex flex-col flex-1 p-4 md:p-8">
         <div className="mx-auto w-full max-w-6xl space-y-6">
           <header className="space-y-2 text-center">
@@ -54,21 +57,37 @@ export default function Home() {
               </section>
             </div>
 
-            <aside
-              className="space-y-3"
-              aria-labelledby="ast-section"
-            >
-              <h2
-                id="ast-section"
-                className="text-sm font-semibold text-muted-foreground"
+            <aside className="space-y-6">
+              <section
+                className="space-y-3"
+                aria-labelledby="ast-section"
               >
-                Décomposition
-              </h2>
-              <AstTree />
+                <h2
+                  id="ast-section"
+                  className="text-sm font-semibold text-muted-foreground"
+                >
+                  Décomposition
+                </h2>
+                <AstTree />
+              </section>
+
+              <section
+                className="space-y-3"
+                aria-labelledby="captures-section"
+              >
+                <h2
+                  id="captures-section"
+                  className="text-sm font-semibold text-muted-foreground"
+                >
+                  Matches & captures
+                </h2>
+                <CapturesPanel />
+              </section>
             </aside>
           </div>
         </div>
       </main>
+      </MatchHoverProvider>
     </HoverProvider>
   );
 }

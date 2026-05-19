@@ -9,23 +9,30 @@ export type HighlightedTextareaProps = {
   value: string;
   onChange: (value: string) => void;
   matches?: Range[];
+  hoveredMatchIndex?: number | null;
+  onMatchHover?: (index: number | null) => void;
   placeholder?: string;
   ariaLabel?: string;
   className?: string;
   minHeight?: number;
 };
 
-const renderWithMatches = (value: string, matches: Range[]): ReactNode => {
+const renderWithMatches = (
+  value: string,
+  matches: Range[],
+  hoveredIndex: number | null | undefined,
+  onMatchHover: ((index: number | null) => void) | undefined,
+): ReactNode => {
   if (matches.length === 0) return value;
 
-  // Sort by start to walk left-to-right safely
-  const sorted = [...matches].sort((a, b) => a.start - b.start);
+  // Keep original indices when sorting (so MatchCard ↔ mark stays in sync)
+  const indexed = matches.map((m, originalIndex) => ({ ...m, originalIndex }));
+  indexed.sort((a, b) => a.start - b.start);
 
   const nodes: ReactNode[] = [];
   let cursor = 0;
 
-  sorted.forEach((m, i) => {
-    // Skip overlapping/invalid ranges
+  indexed.forEach((m, i) => {
     if (m.end <= cursor || m.start >= value.length) return;
     const start = Math.max(m.start, cursor);
     const end = Math.min(m.end, value.length);
@@ -33,10 +40,19 @@ const renderWithMatches = (value: string, matches: Range[]): ReactNode => {
     if (start > cursor) {
       nodes.push(<span key={`gap-${i}`}>{value.slice(cursor, start)}</span>);
     }
+
+    const isHovered = hoveredIndex === m.originalIndex;
     nodes.push(
       <mark
-        key={`m-${i}`}
-        className="bg-blue-500/25 text-foreground rounded-sm"
+        key={`m-${m.originalIndex}`}
+        onMouseEnter={() => onMatchHover?.(m.originalIndex)}
+        onMouseLeave={() => onMatchHover?.(null)}
+        className={cn(
+          "rounded-sm text-foreground pointer-events-auto cursor-default",
+          isHovered
+            ? "bg-blue-500/50 ring-2 ring-blue-500"
+            : "bg-blue-500/25",
+        )}
       >
         {value.slice(start, end)}
       </mark>,
@@ -55,6 +71,8 @@ export const HighlightedTextarea = ({
   value,
   onChange,
   matches,
+  hoveredMatchIndex,
+  onMatchHover,
   placeholder,
   ariaLabel,
   className,
@@ -109,7 +127,7 @@ export const HighlightedTextarea = ({
         className="pointer-events-none absolute inset-0 overflow-hidden whitespace-pre-wrap break-words py-2 pl-3 leading-6 [font-feature-settings:'liga'_0,'calt'_0]"
       >
         {matches && matches.length > 0
-          ? renderWithMatches(value, matches)
+          ? renderWithMatches(value, matches, hoveredMatchIndex, onMatchHover)
           : value}
       </div>
       <textarea
