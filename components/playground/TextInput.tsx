@@ -1,6 +1,7 @@
 "use client";
 
 import { usePlaygroundStore } from "@/stores/playground";
+import { useHoveredMatch } from "@/contexts/MatchHoverContext";
 import { HighlightedTextarea } from "./HighlightedTextarea";
 
 const MAX_SIZE = 100 * 1024; // 100 KB
@@ -13,6 +14,7 @@ export const TextInput = () => {
   const matches = usePlaygroundStore((s) => s.matches);
   const truncated = usePlaygroundStore((s) => s.truncated);
   const runtimeError = usePlaygroundStore((s) => s.runtimeError);
+  const { hoveredMatchIndex, setHoveredMatchIndex } = useHoveredMatch();
 
   const charCount = text.length;
   const isOverLimit = charCount > MAX_SIZE;
@@ -42,6 +44,8 @@ export const TextInput = () => {
         value={text}
         onChange={setText}
         matches={matches}
+        hoveredMatchIndex={hoveredMatchIndex}
+        onMatchHover={setHoveredMatchIndex}
         placeholder="Colle ton texte ici pour tester la regex..."
         ariaLabel="Texte à tester"
       />
