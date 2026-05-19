@@ -3,6 +3,7 @@
 import { useMemo } from "react";
 import { usePlaygroundStore } from "@/stores/playground";
 import { useAst } from "@/hooks/useAst";
+import { useHoveredRange } from "@/contexts/HoverContext";
 import { SyntaxInput, type Token } from "./SyntaxInput";
 import type { EnrichedNode } from "@/types/regex";
 
@@ -23,6 +24,7 @@ export const RegexEditor = () => {
   const source = usePlaygroundStore((s) => s.source);
   const setSource = usePlaygroundStore((s) => s.setSource);
   const { ast, parseError } = useAst();
+  const { hoveredRange } = useHoveredRange();
 
   const tokens = useMemo(() => collectTokens(ast), [ast]);
 
@@ -44,6 +46,7 @@ export const RegexEditor = () => {
       onChange={setSource}
       tokens={tokens}
       errorRange={errorRange}
+      highlightRange={hoveredRange ?? undefined}
       borderState={borderState}
       placeholder="Tape ta regex..."
       ariaLabel="Regex source"
