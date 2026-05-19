@@ -15,6 +15,7 @@ export type SyntaxInputProps = {
   onChange: (value: string) => void;
   tokens?: Token[];
   errorRange?: { start: number; end: number };
+  highlightRange?: { start: number; end: number };
   borderState?: "neutral" | "valid" | "error";
   placeholder?: string;
   ariaLabel?: string;
@@ -43,8 +44,10 @@ const renderTokenized = (
   value: string,
   tokens: Token[] | undefined,
   errorRange: { start: number; end: number } | undefined,
+  highlightRange: { start: number; end: number } | undefined,
 ): ReactNode => {
-  if ((!tokens || tokens.length === 0) && !errorRange) return value;
+  if ((!tokens || tokens.length === 0) && !errorRange && !highlightRange)
+    return value;
 
   // Pour chaque char index, prendre la catégorie du token le plus interne (range le plus petit)
   const categoryAt = (i: number): TokenCategory | null => {
@@ -66,20 +69,37 @@ const renderTokenized = (
   const isError = (i: number): boolean =>
     errorRange ? i >= errorRange.start && i < errorRange.end : false;
 
-  // Group consecutive chars with same (category, error) into spans
+  const isHighlighted = (i: number): boolean =>
+    highlightRange
+      ? i >= highlightRange.start && i < highlightRange.end
+      : false;
+
+  // Group consecutive chars with same (category, error, highlight) into spans
   const spans: {
     text: string;
     category: TokenCategory | null;
     error: boolean;
+    highlighted: boolean;
   }[] = [];
   for (let i = 0; i < value.length; i++) {
     const cat = categoryAt(i);
     const err = isError(i);
+    const hl = isHighlighted(i);
     const last = spans[spans.length - 1];
-    if (last && last.category === cat && last.error === err) {
+    if (
+      last &&
+      last.category === cat &&
+      last.error === err &&
+      last.highlighted === hl
+    ) {
       last.text += value[i];
     } else {
-      spans.push({ text: value[i], category: cat, error: err });
+      spans.push({
+        text: value[i],
+        category: cat,
+        error: err,
+        highlighted: hl,
+      });
     }
   }
 
@@ -89,6 +109,7 @@ const renderTokenized = (
       className={cn(
         span.category && categoryClass[span.category],
         span.error && "underline decoration-wavy decoration-destructive",
+        span.highlighted && "bg-primary/30 ring-1 ring-primary/50 rounded-sm",
       )}
     >
       {span.text}
@@ -101,6 +122,7 @@ export const SyntaxInput = ({
   onChange,
   tokens,
   errorRange,
+  highlightRange,
   borderState = "neutral",
   placeholder,
   ariaLabel,
@@ -130,7 +152,7 @@ export const SyntaxInput = ({
         aria-hidden="true"
         className="pointer-events-none absolute inset-0 overflow-hidden whitespace-pre px-3 py-2 leading-6 [font-feature-settings:'liga'_0,'calt'_0]"
       >
-        {renderTokenized(value, tokens, errorRange)}
+        {renderTokenized(value, tokens, errorRange, highlightRange)}
       </div>
       <input
         ref={inputRef}
