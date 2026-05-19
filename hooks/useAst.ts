@@ -3,6 +3,7 @@ import { useEffect } from "react";
 import { usePlaygroundStore } from "@/stores/playground";
 import { parse } from "@/lib/regex/parse";
 import { enrich } from "@/lib/regex/enrich";
+import { useDebouncedValue } from "@/hooks/useDebouncedValue";
 import { useShallow } from "zustand/react/shallow";
 
 export const useAst = () => {
@@ -15,9 +16,12 @@ export const useAst = () => {
     })),
   );
 
+  const debouncedSource = useDebouncedValue(source, 200);
+  const debouncedFlags = useDebouncedValue(flags, 200);
+
   useEffect(() => {
-    const flagsStr = flags.join("");
-    const result = parse(source, flagsStr);
+    const flagsStr = debouncedFlags.join("");
+    const result = parse(debouncedSource, flagsStr);
     if (result.ok) {
       const ast = enrich(result.pattern);
       setAst(ast, []);
@@ -25,7 +29,7 @@ export const useAst = () => {
     } else {
       setParseError(result.error);
     }
-  }, [source, flags, setAst, setParseError]);
+  }, [debouncedSource, debouncedFlags, setAst, setParseError]);
 
   const ast = usePlaygroundStore((s) => s.ast);
   const parseError = usePlaygroundStore((s) => s.parseError);
