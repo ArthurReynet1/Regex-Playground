@@ -1,7 +1,11 @@
 "use client";
 
 import { useEffect, useRef, type ChangeEvent, type ReactNode } from "react";
+import { motion } from "framer-motion";
 import { cn } from "@/lib/utils";
+
+const STAGGER_DELAY_S = 0.02;
+const MAX_STAGGERED_COUNT = 50;
 
 export type Range = { start: number; end: number };
 
@@ -42,9 +46,14 @@ const renderWithMatches = (
     }
 
     const isHovered = hoveredIndex === m.originalIndex;
+    // Cap the stagger to keep the animation snappy even with thousands of matches.
+    const delay = i < MAX_STAGGERED_COUNT ? i * STAGGER_DELAY_S : 0;
     nodes.push(
-      <mark
+      <motion.mark
         key={`m-${m.originalIndex}`}
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 0.1, delay }}
         onMouseEnter={() => onMatchHover?.(m.originalIndex)}
         onMouseLeave={() => onMatchHover?.(null)}
         className={cn(
@@ -55,7 +64,7 @@ const renderWithMatches = (
         )}
       >
         {value.slice(start, end)}
-      </mark>,
+      </motion.mark>,
     );
     cursor = end;
   });
