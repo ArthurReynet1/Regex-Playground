@@ -1,20 +1,60 @@
 "use client";
 
-import { useEffect, useRef, type ChangeEvent } from "react";
+import { useEffect, useRef, type ChangeEvent, type ReactNode } from "react";
 import { cn } from "@/lib/utils";
+
+export type Range = { start: number; end: number };
 
 export type HighlightedTextareaProps = {
   value: string;
   onChange: (value: string) => void;
+  matches?: Range[];
   placeholder?: string;
   ariaLabel?: string;
   className?: string;
   minHeight?: number;
 };
 
+const renderWithMatches = (value: string, matches: Range[]): ReactNode => {
+  if (matches.length === 0) return value;
+
+  // Sort by start to walk left-to-right safely
+  const sorted = [...matches].sort((a, b) => a.start - b.start);
+
+  const nodes: ReactNode[] = [];
+  let cursor = 0;
+
+  sorted.forEach((m, i) => {
+    // Skip overlapping/invalid ranges
+    if (m.end <= cursor || m.start >= value.length) return;
+    const start = Math.max(m.start, cursor);
+    const end = Math.min(m.end, value.length);
+
+    if (start > cursor) {
+      nodes.push(<span key={`gap-${i}`}>{value.slice(cursor, start)}</span>);
+    }
+    nodes.push(
+      <mark
+        key={`m-${i}`}
+        className="bg-blue-500/25 text-foreground rounded-sm"
+      >
+        {value.slice(start, end)}
+      </mark>,
+    );
+    cursor = end;
+  });
+
+  if (cursor < value.length) {
+    nodes.push(<span key="tail">{value.slice(cursor)}</span>);
+  }
+
+  return nodes;
+};
+
 export const HighlightedTextarea = ({
   value,
   onChange,
+  matches,
   placeholder,
   ariaLabel,
   className,
@@ -68,7 +108,9 @@ export const HighlightedTextarea = ({
         aria-hidden="true"
         className="pointer-events-none absolute inset-0 overflow-hidden whitespace-pre-wrap break-words py-2 pl-3 leading-6 [font-feature-settings:'liga'_0,'calt'_0]"
       >
-        {value}
+        {matches && matches.length > 0
+          ? renderWithMatches(value, matches)
+          : value}
       </div>
       <textarea
         ref={textareaRef}
