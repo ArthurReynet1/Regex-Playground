@@ -17,14 +17,7 @@ import {
   type LibraryCategory,
   type LibraryPattern,
 } from "@/lib/library/patterns";
-import type { Flag } from "@/types/regex";
-
-const VALID_FLAGS = new Set<string>(["g", "i", "m", "s", "u", "y", "d", "v"]);
-
-const parseFlags = (flags: string): Flag[] =>
-  flags
-    .split("")
-    .filter((f) => VALID_FLAGS.has(f)) as Flag[];
+import { parseFlagsString } from "@/lib/regex/parse-flags";
 
 const categoryColor: Record<LibraryCategory, string> = {
   Identifiants: "text-violet-500",
@@ -63,7 +56,7 @@ export const LibraryDialog = ({ open, onOpenChange }: LibraryDialogProps) => {
 
   const handleLoad = (pattern: LibraryPattern) => {
     setSource(pattern.source);
-    setFlags(parseFlags(pattern.flags));
+    setFlags(parseFlagsString(pattern.flags));
     setText(pattern.testText);
     toast.success(`Pattern chargé : ${pattern.name}`);
     onOpenChange(false);
