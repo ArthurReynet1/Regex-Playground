@@ -58,6 +58,18 @@ type TranspileWarning = {
   suggestion?: string;
 };
 
+type RunRequest = {
+  id: number;
+  source: string;
+  flags: string;
+  text: string;
+  maxMatches: number;
+};
+
+type RunResponse =
+  | { id: number; ok: true; matches: MatchResult[]; truncated: boolean }
+  | { id: number; ok: false; error: string };
+
 type EnrichedNodeBase = {
   start: number;
   end: number;
@@ -119,4 +131,6 @@ export type {
   TranspileWarning,
   EnrichedNode,
   EnrichedNodeBase,
+  RunRequest,
+  RunResponse,
 };

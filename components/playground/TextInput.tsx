@@ -10,15 +10,38 @@ const formatNumber = (n: number) => n.toLocaleString("fr-FR");
 export const TextInput = () => {
   const text = usePlaygroundStore((s) => s.text);
   const setText = usePlaygroundStore((s) => s.setText);
+  const matches = usePlaygroundStore((s) => s.matches);
+  const truncated = usePlaygroundStore((s) => s.truncated);
+  const runtimeError = usePlaygroundStore((s) => s.runtimeError);
 
   const charCount = text.length;
   const isOverLimit = charCount > MAX_SIZE;
 
   return (
     <div className="space-y-2">
+      {runtimeError?.kind === "timeout" && (
+        <div
+          role="alert"
+          className="rounded-md border border-destructive/40 bg-destructive/10 px-3 py-2 text-sm text-destructive"
+        >
+          {runtimeError.message}
+        </div>
+      )}
+
+      {truncated && (
+        <div
+          role="status"
+          className="rounded-md border border-amber-500/40 bg-amber-500/10 px-3 py-2 text-sm text-amber-700 dark:text-amber-300"
+        >
+          10 000 premiers matches affichés sur un total estimé plus grand —
+          affine ta regex.
+        </div>
+      )}
+
       <HighlightedTextarea
         value={text}
         onChange={setText}
+        matches={matches}
         placeholder="Colle ton texte ici pour tester la regex..."
         ariaLabel="Texte à tester"
       />
@@ -29,6 +52,8 @@ export const TextInput = () => {
           }
         >
           {formatNumber(charCount)} caractères
+          {matches.length > 0 &&
+            ` — ${formatNumber(matches.length)} ${matches.length > 1 ? "matches" : "match"}`}
           {isOverLimit &&
             " — au-delà de 100 KB, le worker n'exécutera pas la regex"}
         </span>

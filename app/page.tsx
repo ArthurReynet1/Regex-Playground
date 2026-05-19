@@ -3,8 +3,11 @@
 import { RegexEditor } from "@/components/playground/RegexEditor";
 import { FlagsToggles } from "@/components/playground/FlagsToggles";
 import { TextInput } from "@/components/playground/TextInput";
+import { useRegexWorker } from "@/hooks/useRegexWorker";
 
 export default function Home() {
+  useRegexWorker();
+
   return (
     <main className="flex flex-col flex-1 items-center p-8">
       <div className="w-full max-w-3xl space-y-6">
