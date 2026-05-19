@@ -5,6 +5,7 @@ import { FlagsToggles } from "@/components/playground/FlagsToggles";
 import { TextInput } from "@/components/playground/TextInput";
 import { AstTree } from "@/components/playground/AstTree";
 import { CapturesPanel } from "@/components/playground/CapturesPanel";
+import { ReDoSBanner } from "@/components/playground/ReDoSBanner";
 import { HoverProvider } from "@/contexts/HoverContext";
 import { MatchHoverProvider } from "@/contexts/MatchHoverContext";
 import { useRegexWorker } from "@/hooks/useRegexWorker";
@@ -41,6 +42,7 @@ export default function Home() {
                 </h2>
                 <RegexEditor />
                 <FlagsToggles />
+                <ReDoSBanner />
               </section>
 
               <section
