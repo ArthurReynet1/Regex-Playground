@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { Library } from "lucide-react";
+import { History, Library } from "lucide-react";
 import { RegexEditor } from "@/components/playground/RegexEditor";
 import { FlagsToggles } from "@/components/playground/FlagsToggles";
 import { TextInput } from "@/components/playground/TextInput";
@@ -10,14 +10,18 @@ import { CapturesPanel } from "@/components/playground/CapturesPanel";
 import { ReDoSBanner } from "@/components/playground/ReDoSBanner";
 import { ExportPanel } from "@/components/playground/ExportPanel";
 import { LibraryDialog } from "@/components/playground/LibraryDialog";
+import { HistoryDialog } from "@/components/playground/HistoryDialog";
 import { Button } from "@/components/ui/button";
 import { HoverProvider } from "@/contexts/HoverContext";
 import { MatchHoverProvider } from "@/contexts/MatchHoverContext";
 import { useRegexWorker } from "@/hooks/useRegexWorker";
+import { useLocalHistory } from "@/hooks/useLocalHistory";
 
 export default function Home() {
   useRegexWorker();
+  useLocalHistory();
   const [libraryOpen, setLibraryOpen] = useState(false);
+  const [historyOpen, setHistoryOpen] = useState(false);
 
   useEffect(() => {
     const handler = (e: KeyboardEvent) => {
@@ -58,19 +62,31 @@ export default function Home() {
                   >
                     Regex
                   </h2>
-                  <Button
-                    type="button"
-                    variant="outline"
-                    size="sm"
-                    onClick={() => setLibraryOpen(true)}
-                    className="gap-2"
-                  >
-                    <Library className="h-3.5 w-3.5" />
-                    Bibliothèque
-                    <kbd className="ml-1 hidden rounded-sm bg-muted px-1.5 py-0.5 font-mono text-[10px] text-muted-foreground sm:inline">
-                      ⌘K
-                    </kbd>
-                  </Button>
+                  <div className="flex gap-2">
+                    <Button
+                      type="button"
+                      variant="outline"
+                      size="sm"
+                      onClick={() => setHistoryOpen(true)}
+                      className="gap-2"
+                    >
+                      <History className="h-3.5 w-3.5" />
+                      Historique
+                    </Button>
+                    <Button
+                      type="button"
+                      variant="outline"
+                      size="sm"
+                      onClick={() => setLibraryOpen(true)}
+                      className="gap-2"
+                    >
+                      <Library className="h-3.5 w-3.5" />
+                      Bibliothèque
+                      <kbd className="ml-1 hidden rounded-sm bg-muted px-1.5 py-0.5 font-mono text-[10px] text-muted-foreground sm:inline">
+                        ⌘K
+                      </kbd>
+                    </Button>
+                  </div>
                 </div>
                 <RegexEditor />
                 <FlagsToggles />
@@ -135,6 +151,7 @@ export default function Home() {
         </div>
       </main>
       <LibraryDialog open={libraryOpen} onOpenChange={setLibraryOpen} />
+      <HistoryDialog open={historyOpen} onOpenChange={setHistoryOpen} />
       </MatchHoverProvider>
     </HoverProvider>
   );
