@@ -16,10 +16,47 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
+const SITE_TITLE = "Regex Playground";
+const SITE_DESCRIPTION =
+  "Testez, décomposez et exportez vos regex. Un playground visuel pour développeurs francophones.";
+const SITE_URL =
+  process.env.NEXT_PUBLIC_SITE_URL ?? "https://regex-playground.local";
+
 export const metadata: Metadata = {
-  title: "Regex Playground",
-  description:
-    "Testez, décomposez et exportez vos regex. Un playground visuel pour développeurs.",
+  metadataBase: new URL(SITE_URL),
+  title: {
+    default: SITE_TITLE,
+    template: `%s | ${SITE_TITLE}`,
+  },
+  description: SITE_DESCRIPTION,
+  keywords: [
+    "regex",
+    "regular expression",
+    "playground",
+    "tester",
+    "validator",
+    "decomposer",
+    "JavaScript",
+    "Python",
+    "C#",
+  ],
+  authors: [{ name: "Arthur Reynet" }],
+  openGraph: {
+    type: "website",
+    locale: "fr_FR",
+    title: SITE_TITLE,
+    description: SITE_DESCRIPTION,
+    siteName: SITE_TITLE,
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: SITE_TITLE,
+    description: SITE_DESCRIPTION,
+  },
+  robots: {
+    index: true,
+    follow: true,
+  },
 };
 
 export default function RootLayout({
