@@ -11,13 +11,16 @@ import { ReDoSBanner } from "@/components/playground/ReDoSBanner";
 import { ExportPanel } from "@/components/playground/ExportPanel";
 import { LibraryDialog } from "@/components/playground/LibraryDialog";
 import { HistoryDialog } from "@/components/playground/HistoryDialog";
+import { ShareButton } from "@/components/playground/ShareButton";
 import { Button } from "@/components/ui/button";
 import { HoverProvider } from "@/contexts/HoverContext";
 import { MatchHoverProvider } from "@/contexts/MatchHoverContext";
 import { useRegexWorker } from "@/hooks/useRegexWorker";
 import { useLocalHistory } from "@/hooks/useLocalHistory";
+import { useShareSync } from "@/hooks/useShareSync";
 
 export default function Home() {
+  useShareSync();
   useRegexWorker();
   useLocalHistory();
   const [libraryOpen, setLibraryOpen] = useState(false);
@@ -63,6 +66,7 @@ export default function Home() {
                     Regex
                   </h2>
                   <div className="flex gap-2">
+                    <ShareButton />
                     <Button
                       type="button"
                       variant="outline"
