@@ -141,7 +141,7 @@ export const ExportPanel = () => {
           variant="outline"
           size="sm"
           onClick={() => copy(result.pattern, "Motif")}
-          className="flex-1 transition-transform duration-100 active:scale-[0.97]"
+          className="flex-1 motion-safe:transition-transform motion-safe:duration-100 motion-safe:active:scale-[0.97]"
         >
           <Copy className="mr-2 h-3.5 w-3.5" />
           Copier motif
@@ -151,7 +151,7 @@ export const ExportPanel = () => {
           variant="default"
           size="sm"
           onClick={() => copy(snippetWithHeader, "Snippet")}
-          className="flex-1 transition-transform duration-100 active:scale-[0.97]"
+          className="flex-1 motion-safe:transition-transform motion-safe:duration-100 motion-safe:active:scale-[0.97]"
         >
           <Copy className="mr-2 h-3.5 w-3.5" />
           Copier snippet

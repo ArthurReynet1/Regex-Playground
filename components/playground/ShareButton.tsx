@@ -42,7 +42,7 @@ export const ShareButton = () => {
       size="sm"
       onClick={handleShare}
       disabled={isEmpty}
-      className="gap-2 transition-transform duration-100 active:scale-[0.97]"
+      className="gap-2 motion-safe:transition-transform motion-safe:duration-100 motion-safe:active:scale-[0.97]"
     >
       <Share2 className="h-3.5 w-3.5" />
       Partager
